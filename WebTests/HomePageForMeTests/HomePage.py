@@ -73,7 +73,6 @@ class HomePageUITest(BasePageElement):
         self.assertEqual(self.findElements('xpath', '//*[@id="menu-item-4390"]/a').text, 'eCare',
                          'eCare link does not have the correct text')
         
-
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
