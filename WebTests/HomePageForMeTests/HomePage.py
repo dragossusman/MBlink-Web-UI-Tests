@@ -8,6 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from lib2to3.tests.support import driver
 from BasePageElement import BasePageElement
+from selenium.webdriver.common.keys import Keys
 
 class HomePageUITest(BasePageElement):
     
@@ -30,53 +31,53 @@ class HomePageUITest(BasePageElement):
         careersLinkInTopBar = self.findElement('xpath', '//*[@id="menu-item-3549"]/a')
         aboutUsLinkInTopBar = self.findElement('xpath', '//*[@id="menu-item-804"]/a')
         ecareLinkInTopBar = self.findElement('xpath', '//*[@id="menu-item-4390"]/a')
-  
+   
         self.getAttributeFromElements('href', forMeOption, self.Config['PKURL'])
         self.assertEqual(forMeOption.text, 'For Me', 'For Me option text is incorrect')
-          
+           
         # For Business
         self.getAttributeFromElements('href', forBusinessOption, self.Config['PKURL'] + 'business')
         self.assertEqual(forBusinessOption.text, 'For Business', 'For Business option text is incorrect')
-          
+           
         # links in topBar
         self.assertTrue(self.findElement('id', 'menu-top-navigation').is_displayed(), 'Links in topBar are not displayed')
-          
+           
         # home link
         self.assertTrue(self.findElement('id', 'menu-item-2943').is_displayed(), 'Home link in topBar is not displayed')
         self.getAttributeFromElements('href', homeLinkInTopBar, self.Config['PKURL'])
         self.assertEqual(homeLinkInTopBar.text, 'Home',
                          'Home link does not have the correct text')
-          
+           
         # CR - corporate responsibilty
         self.assertTrue(self.findElement('id', 'menu-item-4737').is_displayed(), 'CR link in topBar is not displayed')
         self.getAttributeFromElements('href', crLinkInTopBar, self.Config['PKURL'] + 'about-us/corporate-responsibility/')
         self.assertEqual(crLinkInTopBar.text, 'CR',
                          'CR link does not have the correct text')
-          
+           
         # Careers
         self.assertTrue(self.findElement('id', 'menu-item-3549').is_displayed(), 'Careers link in topBar is not displayed')
         self.getAttributeFromElements('href', careersLinkInTopBar, 'http://jobs.mobilinkgsm.com/')
         self.assertEqual(careersLinkInTopBar.text, 'Careers',
                          'Careers link does not have the correct text')
-          
+           
         # About Us
         self.assertTrue(self.findElement('id', 'menu-item-804').is_displayed(), 'About us link in topBar is not displayed')
         self.getAttributeFromElements('href', aboutUsLinkInTopBar, self.Config['PKURL'] + 'about-us/')
         self.assertEqual(aboutUsLinkInTopBar.text, 'About Us',
                          'About Us link does not have the correct text')
-          
+           
         # eCare
         self.assertTrue(self.findElement('id', 'menu-item-4390').is_displayed(), 'eCare link in topBar is not displayed')
         self.getAttributeFromElements('href', ecareLinkInTopBar, 'https://ecare.mobilinkgsm.com/')
         self.assertEqual(ecareLinkInTopBar.text, 'eCare',
                          'eCare link does not have the correct text')
-          
+           
     def testLogo(self):
         self.openHomePage()
         self.getAttributeFromElements('class', self.findElement('xpath', '//div[@class="mobilink_website"]/div[2]/div[1]/div/div[1]/h2'), 'logo')
         self.assertEqual(self.findElement('xpath', '//div[@class="mobilink_website"]/div[2]/div[1]/div/div[1]/h2/a').text, 'Mobilink', 
                          'The text in logo on homepage is not correct')
-          
+           
     def testSocialLinks(self):
         self.openHomePage()
         # Facebook
@@ -85,7 +86,7 @@ class HomePageUITest(BasePageElement):
         # Linkedin
         self.getAttributeFromElements('href', self.findElement('xpath', '//div[@class="mobilink_website"]/div[2]/div[1]/div/div[2]/ul/li[3]/a'), 'https://twitter.com/Mobilink')
         self.getAttributeFromElements('class', self.findElement('xpath', '//div[@class="mobilink_website"]/div[2]/div[1]/div/div[2]/ul/li[3]/a'), 'icon_twitter')
-          
+           
     def testMainMenuElements(self):
         self.openHomePage()
         self.assertTrue(self.findElement('id', 'megaMenu').is_displayed(), 'Main menu is not displayed on home page')
@@ -117,7 +118,7 @@ class HomePageUITest(BasePageElement):
                         'Customer Care option in main menu does not redirect to correct link')
         self.assertEqual(self.findElement('xpath', '//*[@id="menu-item-185"]/a/span').text, 'Customer Care',
                         'Customer Care option in main menu has incorrect text')
-        
+         
     def testPrepaidSubMenuDropDown(self):
         self.openHomePage()
         prepaidSubMenuDropDown = self.findElement('xpath', '//*[@id="menu-item-82"]/ul')
@@ -135,7 +136,7 @@ class HomePageUITest(BasePageElement):
             self.assertTrue(self.findElement('id', 'menu-item-407').is_displayed(), 'Value Added Services option in submenu is not displayed')
             self.assertTrue(self.findElement('id', 'menu-item-83').is_displayed(), 'Prepaid intl roaming option in submenu is not displayed')
             self.assertTrue(self.findElement('id', 'menu-item-143').is_displayed(), 'More option in submenu is not displayed')
-    
+     
     def testPostpaidSubMenuDropDown(self):
         self.openHomePage()
         postpaidSubMenuLink = self.findElement('xpath', '//*[@id="menu-item-178"]/a/span')
@@ -153,6 +154,35 @@ class HomePageUITest(BasePageElement):
             self.assertTrue(self.findElement('id', 'menu-item-547').is_displayed(), 'Value Added Services option in submenu is not displayed')
             self.assertTrue(self.findElement('id', 'menu-item-551').is_displayed(), 'Prepaid intl roaming option in submenu is not displayed')
             self.assertTrue(self.findElement('id', 'menu-item-1541').is_displayed(), 'More option in submenu is not displayed')
+    
+    def testIntlRoamingSubMenuDropDown(self):
+        self.openHomePage()
+        intlRoamingSubMenuLink = self.findElement('xpath', '//*[@id="menu-item-9010"]/a/span')
+        intlRoamingSubMenuDropDown = self.findElement('xpath', '//*[@id="menu-item-9010"]/ul')
+        self.getAttributeFromElements('style', intlRoamingSubMenuDropDown, 'display: none;')
+        self.openSubMenuDropDown(intlRoamingSubMenuLink)
+        browser = self.Config['Browser']
+        if browser == 'Firefox':
+            self.skipTest('Move to element method in webdriver has issues on Firefox')
+        elif browser == 'Chrome':
+            self.getAttributeFromElements('style', intlRoamingSubMenuDropDown, 'display: block;')
+            self.assertTrue(self.findElement('id', 'menu-item-9011').is_displayed(), 'Postpaid Intl Roaming option in submenu is not displayed')
+            self.assertTrue(self.findElement('id', 'menu-item-9013').is_displayed(), 'Prepaid Intl Roaming option in submenu is not displayed')
+            self.assertTrue(self.findElement('id', 'menu-item-9012').is_displayed(), 'Visiting Roamers option in submenu is not displayed')
+            self.assertTrue(self.findElement('id', 'menu-item-9014').is_displayed(), 'Tariffs option in submenu is not displayed')
+            self.assertTrue(self.findElement('id', 'menu-item-9015').is_displayed(), 'More option in submenu is not displayed')
+    
+    def testSearchFeature(self):
+        self.openHomePage()
+        search_field = self.findElement('id', 'search')
+        self.assertTrue(search_field.is_displayed(), 'Search input field is not displayed')
+        # search random char
+        search_field.send_keys('t')
+        search_field.send_keys(Keys.ENTER)
+        self.wait_for_element(path = '//*[@id="content"]/header/h2')
+        self.assertTrue(self.findElement('id', 'primary').is_displayed(), 'Primary element is not displayed')
+        self.assertTrue(self.findElement('id', 'bsearchform').is_displayed(), 'Bsearchform element is not displayed')
+        self.assertTrue(self.findElement('id', 'searchsubmit').is_displayed(), 'Search again element is not displayed')
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

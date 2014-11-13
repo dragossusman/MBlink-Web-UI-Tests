@@ -50,6 +50,44 @@ class BasePageElement(unittest.TestCase):
             ActionChains(self.Driver).move_to_element(element).perform()
         # unless we set a sleep time the test fails
         time.sleep(5)
+        
+    def wait_for_element(self, path=None, id=None, class_name=None):
+        """
+        waits for an element located by path, id or class_name (created for replacing the implicit wait's)
+        """
+        limit = 10   # waiting limit in seconds
+        inc = 0.5   # in seconds; sleep for 500ms
+        c = 0
+        if id is None and class_name is None:
+            while (c < limit):
+                try:
+                    findel = self.Driver.find_element_by_xpath(path)
+                    return
+                except:
+                    time.sleep(inc)
+                    c = c + inc 
+            print ("The element located at:'" + path + "' hasn't been found.")
+            return
+        if path is None and class_name is None:
+            while (c < limit):
+                try:
+                    findel = self.Driver.find_element_by_id(id)
+                    return
+                except:
+                    time.sleep(inc)
+                    c = c + inc 
+            print ("The element with id: '"+ id +"' hasn't been found.")
+            return
+        if path is None and id is None:
+            while (c < limit):
+                try:
+                    findel = self.Driver.find_element_by_class_name(class_name)#.is_displayed()
+                    return
+                except:
+                    time.sleep(inc)
+                    c = c + inc 
+            print ("The element with class: '"+ class_name +"' hasn't been found.")
+            return
     
     @staticmethod
     def Configure(self):
